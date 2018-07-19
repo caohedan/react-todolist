@@ -16,8 +16,9 @@ export default class TodoList extends Component {
     var keycode = event.keyCode ? event.keyCode : event.which;
     if (keycode == '13') {
       event.target.setAttribute('contentEditable', false);
-      this.state.todos.find(element => element.id === itemId).content =
+      this.props.todoList.find(element => element.id === itemId).content =
         event.target.innerText;
+      this.props.checkItem(this.props.todoList);
     }
   };
   edit = (event, id) => {
