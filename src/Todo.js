@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import TodoList from './Components/TodoList';
 export default class Todo extends Component {
   constructor(props) {
     super();
@@ -16,13 +16,8 @@ export default class Todo extends Component {
     this.setState({ todos: list });
     event.target.previousSibling.value = '';
   };
-  checkItem = id => {
-    let item = this.state.todos.find(x => x.id == id);
-    if (item !== undefined) {
-      item.complete = !item.complete;
-    }
-
-    this.setState({ todos: this.state.todos });
+  checkItem = e => {
+    this.setState({ todos: e });
   };
   setStatusofListByStatus = status => {
     this.setState({ statusOfList: status });
@@ -45,7 +40,7 @@ export default class Todo extends Component {
         return element.complete;
       }
     };
-    const result = todos.filter(filterExecuter[status]);
+    const result = todos.filter(filterExecuter['all']);
     return result;
   };
   handOnKeyPress = (event, itemId) => {
@@ -58,26 +53,6 @@ export default class Todo extends Component {
   };
 
   render() {
-    let list = [];
-    // alert(this.state.todos[0])
-    list = this.filterByStatus(this.state.todos, this.state.statusOfList).map(
-      element => (
-        <li
-          onDoubleClick={e => this.edit(e, element.id)}
-          onKeyPress={(e, itemId) => this.handOnKeyPress(e, element.id)}
-          className={element.complete ? 'checked' : ''}
-          key={element.id}
-        >
-          <input
-            name="done-todo"
-            type="checkbox"
-            className="done-todo"
-            onChange={this.checkItem.bind(this, element.id)}
-          />
-          {element.name}
-        </li>
-      )
-    );
     return (
       <div>
         <div>
@@ -87,7 +62,13 @@ export default class Todo extends Component {
           </div>
         </div>
         <br />
-        <ol>{list}</ol>
+        <TodoList
+          todoList={this.filterByStatus(
+            this.state.todos,
+            this.state.statusOfList
+          )}
+          checkItem={e => this.checkItem(e)}
+        />
         <ul id="filters">
           <li>
             <a
